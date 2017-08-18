@@ -20,6 +20,18 @@ app.set('view engine', 'ejs');
         {
             name: 'Mountain Goats Rest',
             image: 'http://www.fishergroundcampsite.co.uk/data1/images/camp1.jpg'
+        },
+        {
+            name: 'Salmon Creek',
+            image: 'https://media-cdn.tripadvisor.com/media/photo-s/01/a5/b5/a8/low-wray-campsite.jpg'
+        },
+        {
+            name: 'Granite Hill',
+            image: 'http://www.ecocampuk.co.uk/wp-content/uploads/2011/08/Sussex-Campsite-with-Bell-Tents-7.jpeg'
+        },
+        {
+            name: 'Mountain Goats Rest',
+            image: 'http://www.fishergroundcampsite.co.uk/data1/images/camp1.jpg'
         }
     ];
 
