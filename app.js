@@ -1,19 +1,14 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
 
+
+//tell express to use the bodyParser
+app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
 
-//adding landing page
-app.get('/', (req, res) => {
-    //res.send('This will be the landing page soon');
-    res.render('landing');
-});
-
-
-//campgrounds route
-app.get('/campgrounds', (req, res) => {
-    var campgrounds = [
+ var campgrounds = [
         {
             name: 'Salmon Creek',
             image: 'https://media-cdn.tripadvisor.com/media/photo-s/01/a5/b5/a8/low-wray-campsite.jpg'
@@ -28,7 +23,37 @@ app.get('/campgrounds', (req, res) => {
         }
     ];
 
+
+
+//adding landing page
+app.get('/', (req, res) => {
+    //res.send('This will be the landing page soon');
+    res.render('landing');
+});
+
+
+//campgrounds route
+app.get('/campgrounds', (req, res) => {
+   
     res.render('campgrounds', {campgrounds: campgrounds});
+});
+
+
+app.post('/campgrounds', (req, res) => {
+    //get data from form and add to campground array
+    //res.send('You hit the post route');
+    var name = req.body.name;
+    var image = req.body.image;
+    var newCampground= {name: name, image: image};
+    campgrounds.push(newCampground);
+    //redirect back to campgrounds page 
+
+    res.redirect('/campgrounds');
+});
+
+
+app.get('/campgrounds/new', (req, res) => {
+    res.render('new');
 });
 
 
