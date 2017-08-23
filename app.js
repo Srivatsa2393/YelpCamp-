@@ -14,16 +14,18 @@ app.set('view engine', 'ejs');
 //Schema setup
 var campgroundSchema = new mongoose.Schema({
     name: String,
-    image: String
+    image: String,
+    description: String
 });
 
 var Campground = mongoose.model("Campground", campgroundSchema);
 
 //add a campground
-/* Campground.create(
+/*  Campground.create(
     {
             name: 'Granite Hill',
-            image: 'http://www.ecocampuk.co.uk/wp-content/uploads/2011/08/Sussex-Campsite-with-Bell-Tents-7.jpeg'
+            image: 'http://www.ecocampuk.co.uk/wp-content/uploads/2011/08/Sussex-Campsite-with-Bell-Tents-7.jpeg',
+            description: 'This is a huge granite hill, no water but amazing location to hangout!'
     }, function(err, campground){
         if (err){
             console.log('Error!!');
@@ -31,7 +33,7 @@ var Campground = mongoose.model("Campground", campgroundSchema);
             console.log('Newly created campground: ');
             console.log(campground);
         }
-    }); */
+    });  */
 
 
 /*  var campgrounds = [
@@ -110,6 +112,14 @@ app.post('/campgrounds', (req, res) => {
 
 app.get('/campgrounds/new', (req, res) => {
     res.render('new');
+});
+
+
+app.get('/campgrounds/:id', (req, res) => {
+    //find the campground with provided id
+    //render show template with that campground
+    res.render("show");
+    //res.send("The new route show page has started");
 });
 
 
