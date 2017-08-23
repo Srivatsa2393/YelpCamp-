@@ -80,7 +80,7 @@ app.get('/campgrounds', (req, res) => {
         if (err){
             console.log('Error!!');
         }else {
-            res.render('campgrounds', {campgrounds: allCampgrounds})
+            res.render('index', {campgrounds: allCampgrounds})
         }
     });
 
@@ -94,7 +94,8 @@ app.post('/campgrounds', (req, res) => {
     //res.send('You hit the post route');
     var name = req.body.name;
     var image = req.body.image;
-    var newCampground= {name: name, image: image};
+    var description = req.body.description;
+    var newCampground= {name: name, image: image, description: description};
     //Create a new campground and save it to the database
     Campground.create(newCampground, function(err, newlyCreated){
         if (err){
@@ -117,8 +118,16 @@ app.get('/campgrounds/new', (req, res) => {
 
 app.get('/campgrounds/:id', (req, res) => {
     //find the campground with provided id
-    //render show template with that campground
-    res.render("show");
+    Campground.findById(req.params.id, function(err, foundCampground){
+        if (err){
+            console.log(err);
+        }else{
+             //render show template with that campground
+             res.render("show", {campground: foundCampground});
+        }
+    });
+    //req.params.id
+   
     //res.send("The new route show page has started");
 });
 
