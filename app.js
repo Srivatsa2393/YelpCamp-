@@ -10,6 +10,8 @@ mongoose.connect("mongodb://localhost/yelp_camp");
 //tell express to use the bodyParser
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
+app.use(express.static(__dirname + "/public"))
+//console.log(__dirname);
 
 var Campground = require('./models/campground');
 var Comment = require('./models/comment');
