@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
 var Campground = require('./models/campground');
+var Comment = require('./models/comment');
 
 var seedDB = require('./seeds');
 
@@ -142,9 +143,33 @@ app.get('/campgrounds/:id/comments/new', (req, res) => {
         if (err){
             console.log(err);
         }else{
-            res.render('comments/new', {campground: campground});
+            res.render('comments/new', {campground: campground}); 
         }
-    })
+    });
+});
+
+app.post('/campgrounds/:id/comments', (req, res) => {
+    //lookup campgrounds using id
+    Campground.findById(req.params.id, function(err, campground){
+        if (err) {
+            console.log(err);
+            res.redirect('/campgrounds');
+        }else{
+            //console.log(req.body.comment);
+             //create new comment
+             Comment.create(req.body.comment, function(err, comment){
+                if (err){
+                    console.log(err);
+                }else{
+                    //connect new comment to campground
+                    campground.comments.push(comment);
+                    campground.save();
+                    //redirect to campground show page
+                    res.redirect('/campgrounds/' + campground._id);
+                }
+             });
+        }
+    });
 });
 
 app.listen(3000, () => {
