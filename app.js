@@ -11,14 +11,12 @@ mongoose.connect("mongodb://localhost/yelp_camp");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
-//Schema setup
-var campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
+var Campground = require('./models/campground');
 
-var Campground = mongoose.model("Campground", campgroundSchema);
+var seedDB = require('./seeds');
+
+
+seedDB();
 
 //add a campground
 /*  Campground.create(
@@ -115,13 +113,14 @@ app.get('/campgrounds/new', (req, res) => {
     res.render('new');
 });
 
-
+//Show route
 app.get('/campgrounds/:id', (req, res) => {
     //find the campground with provided id
-    Campground.findById(req.params.id, function(err, foundCampground){
+    Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
         if (err){
             console.log(err);
         }else{
+            console.log(foundCampground);
              //render show template with that campground
              res.render("show", {campground: foundCampground});
         }
