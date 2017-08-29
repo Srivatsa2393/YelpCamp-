@@ -78,7 +78,7 @@ app.get('/campgrounds', (req, res) => {
         if (err){
             console.log('Error!!');
         }else {
-            res.render('index', {campgrounds: allCampgrounds})
+            res.render('campgrounds/index', {campgrounds: allCampgrounds})
         }
     });
 
@@ -110,7 +110,7 @@ app.post('/campgrounds', (req, res) => {
 
 
 app.get('/campgrounds/new', (req, res) => {
-    res.render('new');
+    res.render('campgrounds/new');
 });
 
 //Show route
@@ -122,7 +122,7 @@ app.get('/campgrounds/:id', (req, res) => {
         }else{
             console.log(foundCampground);
              //render show template with that campground
-             res.render("show", {campground: foundCampground});
+             res.render("campgrounds/show", {campground: foundCampground});
         }
     });
     //req.params.id
@@ -130,6 +130,22 @@ app.get('/campgrounds/:id', (req, res) => {
     //res.send("The new route show page has started");
 });
 
+
+// =================================
+// COMMENT ROUTES
+// =================================
+
+app.get('/campgrounds/:id/comments/new', (req, res) => {
+    //res.send('This will be the comment form')
+    //find campground by id
+    Campground.findById(req.params.id, function(err, campground){
+        if (err){
+            console.log(err);
+        }else{
+            res.render('comments/new', {campground: campground});
+        }
+    })
+});
 
 app.listen(3000, () => {
     console.log('Yelpcamp server started');
