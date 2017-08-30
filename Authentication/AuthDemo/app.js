@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
-app.get('/secret', (req, res) => {
+app.get('/secret', isLoggedIn, (req, res) => {
     res.render('secret');
 });
 
@@ -72,6 +72,25 @@ app.post('/login', passport.authenticate("local", {
 }) ,(req, res) => {
 
 });
+
+
+//logout route
+app.get('/logout', (req, res) => {
+    //res.send('Ok, I will log you out.. not yet though...');
+    req.logout();
+    res.redirect('/');
+})
+
+
+//middleware
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()){
+        return next();
+    }
+    res.redirect('/login');
+};
+
+
 
 app.listen('3000', () => {
     console.log('server started');
