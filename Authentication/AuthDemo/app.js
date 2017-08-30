@@ -19,12 +19,15 @@ app.use(require('express-session')({
     resave: false,
     saveUninitialized: false
 }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
+//=======================
+//ROUTES
+//=======================
 
 app.get('/', (req, res) => {
     res.render('home');
@@ -32,8 +35,32 @@ app.get('/', (req, res) => {
 
 app.get('/secret', (req, res) => {
     res.render('secret');
-})
+});
+
+
+//Auth routes
+//show signup form
+app.get('/register', (req, res) => {
+    res.render('register');
+});
+
+//handling user signup
+app.post('/register', (req, res) => {
+    req.body.username
+    req.body.password
+    User.register(new User({username: req.body.username}), req.body.password, function(err, user){
+        if (err){
+            console.log(err);
+            return res.render('register');
+        }
+            passport.authenticate("local")(req, res, function(){
+                res.redirect('/secret');
+            });
+    });
+});
+
 
 app.listen('3000', () => {
     console.log('server started');
-})
+});
+
