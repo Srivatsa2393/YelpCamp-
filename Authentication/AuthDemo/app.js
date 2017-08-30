@@ -21,7 +21,7 @@ app.use(require('express-session')({
 }));
 app.use(bodyParser.urlencoded({extended: true}));
 
-
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -59,6 +59,19 @@ app.post('/register', (req, res) => {
     });
 });
 
+//add login routes
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+//login logic
+//middleware
+app.post('/login', passport.authenticate("local", {
+    successRedirect: '/secret',
+    failureRedirect: '/login'
+}) ,(req, res) => {
+
+});
 
 app.listen('3000', () => {
     console.log('server started');
