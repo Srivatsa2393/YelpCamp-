@@ -215,6 +215,20 @@ app.post('/register', (req, res) => {
 })
 
 
+//login routes show login form
+app.get('/login', (req, res) => {
+    res.render('login');
+})
+
+//handling the login logic by using a middleware
+app.post('/login', passport.authenticate('local', 
+    {
+        successRedirect: '/campgrounds', 
+        failureRedirect: '/login'
+    }),(req, res) => {
+    //res.send('Login successful');
+})
+
 
 
 app.listen(3100, () => {
