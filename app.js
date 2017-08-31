@@ -20,10 +20,25 @@ app.use(express.static(__dirname + "/public"))
 var Campground = require('./models/campground');
 var Comment = require('./models/comment');
 
-var seedDB = require('./seeds');
+var seedDB = require('./seeds'); 
 
 
 seedDB();
+
+
+//Passport configuration
+app.use(require('express-session')({
+    secret: 'Srivatsa never ever give up',
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 //add a campground
 /*  Campground.create(
@@ -177,6 +192,30 @@ app.post('/campgrounds/:id/comments', (req, res) => {
         }
     });
 });
+
+
+//AUTH routes
+app.get('/register', (req, res) => {
+    res.render('register');
+})
+
+//handling the signup logic
+app.post('/register', (req, res) => {
+    //res.send('Signing you up into yelpcamp....')
+    var newUser = new User({ username: req.body.username});
+    User.register(newUser, req.body.password, function(err, user){
+        if (err){
+            console.log(err);
+            return res.render('register');
+        }
+        passport.authenticate('local')(req, res, function(){
+            res.redirect('/campgrounds');
+        });
+    });
+})
+
+
+
 
 app.listen(3100, () => {
     console.log('Yelpcamp server started');
