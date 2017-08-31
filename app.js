@@ -39,6 +39,12 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+//middleware
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    next();
+});
+
 
 //add a campground
 /*  Campground.create(
@@ -94,7 +100,7 @@ app.get('/', (req, res) => {
 
 //campgrounds route
 app.get('/campgrounds', (req, res) => {
-    
+    //console.log(req.user);
     //get all campgrounds from db
     Campground.find({}, function(err, allCampgrounds){
         if (err){
