@@ -157,7 +157,7 @@ app.get('/campgrounds/:id', (req, res) => {
 // COMMENT ROUTES
 // =================================
 
-app.get('/campgrounds/:id/comments/new', (req, res) => {
+app.get('/campgrounds/:id/comments/new', isLoggedIn, (req, res) => {
     //res.send('This will be the comment form')
     //find campground by id
     Campground.findById(req.params.id, function(err, campground){
@@ -169,7 +169,7 @@ app.get('/campgrounds/:id/comments/new', (req, res) => {
     });
 });
 
-app.post('/campgrounds/:id/comments', (req, res) => {
+app.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
     //lookup campgrounds using id
     Campground.findById(req.params.id, function(err, campground){
         if (err) {
@@ -228,6 +228,22 @@ app.post('/login', passport.authenticate('local',
     }),(req, res) => {
     //res.send('Login successful');
 })
+
+
+//logout route logic
+app.get('/logout', (req, res) => {
+    //res.send('Logout');
+    req.logout();
+    res.redirect('/campgrounds');
+})
+
+//middleware
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect('/login');
+}
 
 
 
