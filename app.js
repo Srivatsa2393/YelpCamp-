@@ -25,8 +25,8 @@ var Comment = require('./models/comment');
 
 var seedDB = require('./seeds'); 
 
-
-seedDB();
+//seed the database
+//seedDB();
 
 
 //Passport configuration
