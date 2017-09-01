@@ -118,6 +118,36 @@ router.get('/campgrounds/:id', (req, res) => {
     //res.send("The new route show page has started");
 });
 
+
+//Edit campground route(GET)
+router.get('/campgrounds/:id/edit', (req, res) => {
+    //res.send('Edit campground route');
+    Campground.findById(req.params.id, function(err, foundCampground){
+        if (err){
+            res.redirect('/campgrounds');
+        }else{
+            //edit the render form
+            res.render("campgrounds/edit", {campground: foundCampground});
+        }
+    });
+});
+
+
+//Update campground route(PUT)
+router.put('/campgrounds/:id', (req, res) => {
+    //find and update the correct campground 
+    Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, updatedCampground){
+        if (err){
+            res.redirect('/campgrounds');
+        }else{
+            res.redirect('/campgrounds/' + req.params.id);
+        }
+    });
+    //redirect it somewhere, usually the show page
+});
+
+
+
 //middleware
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
