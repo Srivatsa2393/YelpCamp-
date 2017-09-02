@@ -74,6 +74,18 @@ router.put('/campgrounds/:id/comments/:comment_id', (req, res) => {
     });
 });
 
+//Delete comment
+router.delete('/campgrounds/:id/comments/:comment_id', (req, res) => {
+    //findbyidandremove
+    //res.send('Deleted a comment');
+    Comment.findByIdAndRemove(req.params.comment_id, function(err) {
+        if (err){
+            res.redirect('back');
+        }else {
+            res.redirect('/campgrounds/' + req.params.id);
+        }
+    })
+});
 
 
 //middleware
