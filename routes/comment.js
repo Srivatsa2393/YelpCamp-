@@ -50,6 +50,32 @@ router.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
     });
 });
 
+//Comments edit route
+router.get("/campgrounds/:id/comments/:comment_id/edit", (req, res) => {
+    //res.send('Edit route for comment');
+    Comment.findById(req.params.comment_id, function(err, foundComment) {
+        if (err){
+            res.redirect('back');
+        }else{
+            res.render('comments/edit', {campground_id: req.params.id, comment: foundComment});
+        }
+    })
+});
+
+//comments update
+router.put('/campgrounds/:id/comments/:comment_id', (req, res) => {
+    //res.send('You hit the update route for comment')
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){
+        if (err){
+            res.redirect('back');
+        }else{
+            res.redirect('/campgrounds/' +  req.params.id );
+        }
+    });
+});
+
+
+
 //middleware
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
