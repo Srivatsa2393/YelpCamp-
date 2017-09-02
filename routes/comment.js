@@ -51,7 +51,7 @@ router.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
 });
 
 //Comments edit route
-router.get("/campgrounds/:id/comments/:comment_id/edit", (req, res) => {
+router.get("/campgrounds/:id/comments/:comment_id/edit", checkCommentOwnership, (req, res) => {
     //res.send('Edit route for comment');
     Comment.findById(req.params.comment_id, function(err, foundComment) {
         if (err){
@@ -63,7 +63,7 @@ router.get("/campgrounds/:id/comments/:comment_id/edit", (req, res) => {
 });
 
 //comments update
-router.put('/campgrounds/:id/comments/:comment_id', (req, res) => {
+router.put('/campgrounds/:id/comments/:comment_id', checkCommentOwnership, (req, res) => {
     //res.send('You hit the update route for comment')
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){
         if (err){
@@ -75,7 +75,7 @@ router.put('/campgrounds/:id/comments/:comment_id', (req, res) => {
 });
 
 //Delete comment
-router.delete('/campgrounds/:id/comments/:comment_id', (req, res) => {
+router.delete('/campgrounds/:id/comments/:comment_id', checkCommentOwnership, (req, res) => {
     //findbyidandremove
     //res.send('Deleted a comment');
     Comment.findByIdAndRemove(req.params.comment_id, function(err) {
@@ -95,6 +95,32 @@ function isLoggedIn(req, res, next){
     }
     res.redirect('/login');
 }
+
+function checkCommentOwnership(req, res, next){
+    if (req.isAuthenticated()){
+        Comment.findById(req.params.comment_id, function(err, foundComment){
+            if (err){
+                res.redirect('back');
+            }else{
+                //does user own the comment?
+                //console.log(foundCampground.author.id);
+                //console.log(req.user._id);
+                if (foundComment.author.id.equals(req.user._id)){
+                    //edit the render form
+                    //res.render("campgrounds/edit", {campground: foundCampground});
+                    next();
+                }else{
+                    //res.send('You do not have permission to do that');
+                    res.redirect('back');
+                } 
+            }
+        });
+    }else {
+        //console.log('You need to be logged in to do that');
+        //res.send('You need to be logged in to do that');
+        res.redirect('back');
+    }
+};
  
 
 
