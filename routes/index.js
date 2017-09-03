@@ -33,7 +33,7 @@ router.post('/register', (req, res) => {
 
 //login routes show login form
 router.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login', {message: req.flash('error')});
 })
 
 //handling the login logic by using a middleware
