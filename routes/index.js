@@ -33,7 +33,7 @@ router.post('/register', (req, res) => {
 
 //login routes show login form
 router.get('/login', (req, res) => {
-    res.render('login', {message: req.flash('error')});
+    res.render('login');
 })
 
 //handling the login logic by using a middleware
@@ -50,6 +50,7 @@ router.post('/login', passport.authenticate('local',
 router.get('/logout', (req, res) => {
     //res.send('Logout');
     req.logout();
+    req.flash('success', 'Logged you out! Bye!');
     res.redirect('/campgrounds');
 })
 
